@@ -1,0 +1,15 @@
+﻿<div id="login-container">
+    <p class="error-msg">{{errorMessage}}</p>
+	<div class="input">
+        <input type="text" id="tb-username" placeholder="Username" ng-model="user.username" />
+        <input type="password" id="tb-password" placeholder="Password" ng-model="user.password"/>
+        <div id="avatar-container" class="input" ng-model="avatars">
+        
+            <a ng-repeat="a in avatars">
+                <img ng-src="{{a}}" ng-click="selectAvatar($index)"/>
+            </a>
+        
+        </div>
+    </div>
+	<a class="button" id="btn-register" href="#/register" ng-model="user.avatar" ng-click="registerUser()">Register</a>
+</div>

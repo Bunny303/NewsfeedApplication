@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunnyGame.Models", "BunnyGame.Models\BunnyGame.Models.csproj", "{B48840E2-69F0-4136-B417-43B97700A33A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunnyGame.Data", "BunnyGame.Data\BunnyGame.Data.csproj", "{EB84DE62-68B0-4927-8D82-015946829BF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunnyGame.Services", "BunnyGame.Services\BunnyGame.Services.csproj", "{B1B982BC-3664-4999-B514-328969C23D63}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B48840E2-69F0-4136-B417-43B97700A33A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B48840E2-69F0-4136-B417-43B97700A33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B48840E2-69F0-4136-B417-43B97700A33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B48840E2-69F0-4136-B417-43B97700A33A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB84DE62-68B0-4927-8D82-015946829BF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB84DE62-68B0-4927-8D82-015946829BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB84DE62-68B0-4927-8D82-015946829BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB84DE62-68B0-4927-8D82-015946829BF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1B982BC-3664-4999-B514-328969C23D63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1B982BC-3664-4999-B514-328969C23D63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1B982BC-3664-4999-B514-328969C23D63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1B982BC-3664-4999-B514-328969C23D63}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

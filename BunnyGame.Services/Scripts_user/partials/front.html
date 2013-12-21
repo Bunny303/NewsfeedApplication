@@ -1,0 +1,27 @@
+﻿<div id="posts-container">
+    <div id="search-user">
+        <input id="search-username" ng-model="searchedUser.username" />
+        <button ng-click="searchUser()">Search</button>
+        <div id="result-search">
+            <img id="result-avatar" src="{{resultUser.avatar}}"/>
+            <p id="result-username">{{resultUser.username}}</p>
+        </div>
+        <button>Request friendship</button>
+    </div>
+    <div class="input">
+        <input id="title-post" type="text" placeholder="Title" ng-model="post.title"/>
+        <input id="content-post" type="text" placeholder="Type your text here..." ng-model="post.content"/>
+        <button class="button" ng-click="addPost()">Publish</button>
+    </div>
+    <div>
+        <ul class="input" ng-model="posts">
+            <li ng-repeat="p in posts">
+                <img ng-src="{{p.avatar}}" />
+                <strong>{{p.author}}</strong>
+                <p>{{p.title}}</p>
+                <p>{{p.content}}</p>
+                <p>{{p.date | date:'d-MMM-yyyy'}}</p>
+            </li>
+        </ul>
+    </div>
+</div>
