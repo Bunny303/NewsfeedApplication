@@ -25,20 +25,36 @@ namespace BunnyGame.Services.Models
     }
 
     [DataContract]
-    public class UserModel
+    public class UserSearchModel
     {
-        [DataMember(Name = "id")]
-        public int Id { get; set; }
-
         [DataMember(Name = "username")]
         public string Username { get; set; }
 
         [DataMember(Name = "avatar")]
         public string Avatar { get; set; }
+    }
 
+    [DataContract]
+    public class UserFriendModel: UserSearchModel
+    {
         [DataMember(Name = "wall")]
         public List<PostModel> Wall { get; set; }
     }
+    //[DataContract]
+    //public class UserModel
+    //{
+    //    [DataMember(Name = "id")]
+    //    public int Id { get; set; }
+
+    //    [DataMember(Name = "username")]
+    //    public string Username { get; set; }
+
+    //    [DataMember(Name = "avatar")]
+    //    public string Avatar { get; set; }
+
+    //    [DataMember(Name = "wall")]
+    //    public List<PostModel> Wall { get; set; }
+    //}
 
     [DataContract]
     public class UserLoggedModel
@@ -54,15 +70,13 @@ namespace BunnyGame.Services.Models
 
         [DataMember(Name = "wall")]
         public List<PostModel> Wall { get; set; }
+
+        [DataMember(Name = "friends")]
+        public List<UserFriendModel> Friends { get; set; }
+
+        [DataMember(Name = "receiveRequests")]
+        public List<ReceiveRequestModel> ReceiveRequests { get; set; }
     }
 
-    [DataContract]
-    public class UserSearchModel
-    {
-        [DataMember(Name = "username")]
-        public string Username { get; set; }
-
-        [DataMember(Name = "avatar")]
-        public string Avatar { get; set; }
-    }
+    
 }

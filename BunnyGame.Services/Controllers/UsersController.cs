@@ -71,5 +71,47 @@ namespace BunnyGame.Services.Controllers
 
             return result;
         }
+
+        [HttpGet]
+        [ActionName("getUserBySessionKey")]
+        public UserLoggedModel GetUserBySessionKey(string sessionKey)
+        {
+            var result = UserDataPersister.GetUserBySessionKey(sessionKey);
+
+            return result;
+        }
+
+        [HttpPost]
+        [ActionName("sendRequest")]
+        public HttpResponseMessage SendRequest(UserSearchModel user, string sessionKey)
+        {
+            var responseMsg = this.PerformOperation(() =>
+            {
+                RequestDataPersister.AddRequest(user.Username, user.Avatar, sessionKey);
+            });
+            return responseMsg;
+        }
+
+        [HttpDelete]
+        [ActionName("deleteRequest")]
+        public HttpResponseMessage DeleteRequest(int id)
+        {
+            var responseMsg = this.PerformOperation(() =>
+            {
+                RequestDataPersister.DeleteRequest(id);
+            });
+            return responseMsg;
+        }
+
+        [HttpPost]
+        [ActionName("addFriend")]
+        public HttpResponseMessage AddFriend(int senderId, string sessionKey)
+        {
+            var responseMsg = this.PerformOperation(() =>
+            {
+                UserDataPersister.AddFriend(senderId, sessionKey);
+            });
+            return responseMsg;
+        }
     }
 }

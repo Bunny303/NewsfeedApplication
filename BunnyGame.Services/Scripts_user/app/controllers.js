@@ -68,31 +68,57 @@ function($scope, $http, $location) {
 
 gameControllers.controller('MenuController', ['$scope', '$http', '$location', '$route',
     function ($scope, $http, $location, $route) {
-        $scope.post = {
-            title: "",
-            content: ""
+        $scope.loggedUser = {
+            //sessionKey
+            username: "",
+            avatar: "",
+            wall: [],
+            friends: [],
+            receiveRequests: []
         };
+
         var sessionKey = localStorage.getItem("sessionKey");
 
-        //Get all post 
-        $http.get('http://localhost:39878/api/Posts/getPosts/' + sessionKey)
-            .success(function (posts) {
-                var allposts = [];
-                _.each(posts, function (post) {
-                    allposts.push({
+        $http.get('http://localhost:39878/api/Users/getUserBySessionKey/' + sessionKey)
+            .success(function (user) {
+                var currUser = {
+                    username: user.username,
+                    avatar: user.avatar,
+                    wall: [],
+                    friends: [],
+                    receiveRequests: []
+                };
+                _.each(user.wall, function (post) {
+                    currUser.wall.push({
                         title: post.Title,
                         content: post.Content,
                         date: post.PublicDate,
                         author: post.Author,
                         avatar: post.Avatar
                     });
-                })
-                $scope.posts = allposts;
+                });
+                _.each(user.friends, function (friend) {
+                    currUser.friends.push({
+                        username: friend.username,
+                        avatar: friend.avatar
+                    });
+                });
+                _.each(user.receiveRequests, function (request) {
+                    currUser.receiveRequests.push({
+                        id: request.Id,
+                        title: request.Title,
+                        senderId: request.SenderId,
+                        senderName: request.SenderName,
+                        senderAvatar: request.SenderAvatar,
+                        answer: request.Answer
+                    });
+                });
+                $scope.loggedUser = currUser;
             })
             .error(function (er) {
                 console.log(JSON.stringify(er));
             });
-
+        
         //Add single post
         $scope.addPost = function () {
             var url = 'api/Posts/addPost/' + sessionKey + '?title=' + $scope.post.title + '&content=' + $scope.post.content;
@@ -105,10 +131,10 @@ gameControllers.controller('MenuController', ['$scope', '$http', '$location', '$
                     console.log(JSON.stringify(er));
                 });
 
-            $scope.post = {
-                title: "",
-                content: ""
-            };
+            //$scope.post = {
+            //    title: "",
+            //    content: ""
+            //};
         };
 
         //Search user
@@ -134,6 +160,40 @@ gameControllers.controller('MenuController', ['$scope', '$http', '$location', '$
             .error(function (er) {
                 console.log(JSON.stringify(er));
             });
+        };
+
+        $scope.makeRequest = function () {
+            $http.post('http://localhost:39878/api/Users/sendrequest/' + sessionKey, { username: $scope.resultUser.username, avatar: $scope.resultUser.avatar })
+                .success(function (data) {
+                    //show message
+                    console.log(JSON.stringify(data));
+                })
+                .error(function (er) {
+                    console.log(JSON.stringify(er));
+                });
+        };
+
+        $scope.addFriend = function (senderId, id) {
+            $http.post('http://localhost:39878/api/Users/addFriend/' + sessionKey + '?senderId=' + senderId)
+                .success(function (data) {
+                    $scope.deleteRequest(id);
+                    $route.reload();
+                    console.log(JSON.stringify(data));
+                })
+                .error(function (er) {
+                    console.log(JSON.stringify(er));
+                });
+        };
+
+        $scope.deleteRequest = function (id) {
+            $http({ method: 'DELETE', url: 'http://localhost:39878/api/Users/deleteRequest?id=' + id })
+                .success(function (data) {
+                    $route.reload();
+                    console.log(JSON.stringify(data));
+                })
+                .error(function (er) {
+                    console.log(JSON.stringify(er));
+                });
         };
         
 }]);

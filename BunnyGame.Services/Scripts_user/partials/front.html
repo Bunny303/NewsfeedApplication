@@ -1,4 +1,12 @@
 ﻿<div id="posts-container">
+    <div id="friends">
+        <ul class="input" ng-model="loggedUser.friends">
+            <li ng-repeat="friend in loggedUser.friends">
+                {{friend.username}}
+                <img ng-src="{{friend.avatar}}" />
+            </li>
+        </ul>
+    </div>
     <div id="search-user">
         <input id="search-username" ng-model="searchedUser.username" />
         <button ng-click="searchUser()">Search</button>
@@ -6,7 +14,18 @@
             <img id="result-avatar" src="{{resultUser.avatar}}"/>
             <p id="result-username">{{resultUser.username}}</p>
         </div>
-        <button>Request friendship</button>
+        
+        <button ng-click="makeRequest()">Request friendship</button>
+    </div>
+    <div>
+        <ul class="input" ng-model="loggedUser.receiveRequests">
+            <li ng-repeat="request in loggedUser.receiveRequests">
+                {{request.title}} from {{request.senderName}}
+                <img ng-src="{{request.senderAvatar}}" />
+                <button ng-click="addFriend(request.senderId, request.id)">Accept</button>
+                <button ng-click="deleteRequest(request.id)">Decline</button>
+            </li>
+        </ul>
     </div>
     <div class="input">
         <input id="title-post" type="text" placeholder="Title" ng-model="post.title"/>
@@ -14,13 +33,13 @@
         <button class="button" ng-click="addPost()">Publish</button>
     </div>
     <div>
-        <ul class="input" ng-model="posts">
-            <li ng-repeat="p in posts">
-                <img ng-src="{{p.avatar}}" />
-                <strong>{{p.author}}</strong>
-                <p>{{p.title}}</p>
-                <p>{{p.content}}</p>
-                <p>{{p.date | date:'d-MMM-yyyy'}}</p>
+        <ul class="input" ng-model="loggedUser.wall">
+            <li ng-repeat="post in loggedUser.wall">
+                <img ng-src="{{post.avatar}}" />
+                <strong>{{post.author}}</strong>
+                <p>{{post.title}}</p>
+                <p>{{post.content}}</p>
+                <p>{{post.date | date:'d-MMM-yyyy'}}</p>
             </li>
         </ul>
     </div>

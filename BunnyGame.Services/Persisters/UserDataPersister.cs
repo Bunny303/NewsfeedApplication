@@ -187,5 +187,91 @@ namespace BunnyGame.Services.Persisters
                 return user.FirstOrDefault();
             }
         }
+
+        public static UserLoggedModel GetUserBySessionKey(string sessionKey)
+        {
+            var context = new BunnyGameContext();
+            using (context)
+            {
+                var user =
+                    (from u in context.Users
+                    where u.SessionKey == sessionKey
+                    select new UserLoggedModel()
+                    {
+                        Username = u.Username,
+                        Avatar = u.Avatar,
+                        //Have to be here?
+                        SessionKey = u.SessionKey,
+                        Wall = (from post in context.Posts
+                                //Add friends posts here
+                                where post.UserId == u.Id
+                                select new PostModel()
+                                {
+                                Title = post.Title,
+                                Content = post.Content,
+                                PublicDate = post.PublicDate,
+                                Author = post.User.Username,
+                                Avatar = post.User.Avatar
+                                }).ToList(),
+                        ReceiveRequests = (from request in context.Requests
+                                            where request.RecipientId == u.Id
+                                            select new ReceiveRequestModel()
+                                            {
+                                               Id = request.Id,
+                                               Title = request.Title,
+                                               SenderId = request.SenderId,
+                                               SenderName = request.Sender.Username,
+                                               SenderAvatar = request.Sender.Avatar,
+                                               Answer = request.Answer,
+                                            }).ToList(),
+                        Friends = (from friend in context.Friends
+                                   where friend.UserId == u.Id
+                                   select new UserFriendModel()
+                                   {
+                                       Username = friend.Username,
+                                       Avatar = friend.Avatar
+                                   }).ToList()
+                    });
+                return user.FirstOrDefault();
+            }
+        }
+
+        public static void AddFriend(int senderId, string sessionKey)
+        {
+            using (BunnyGameContext context = new BunnyGameContext())
+            {
+                //Add request sender as friend in request receiver's list
+                Friend dbFriendSender = new Friend()
+                {
+                    Username = (from request in context.Requests
+                                where request.SenderId == senderId
+                                select request.Sender.Username).FirstOrDefault(),
+                    Avatar = (from request in context.Requests
+                              where request.SenderId == senderId
+                              select request.Sender.Avatar).FirstOrDefault(),
+                    UserId = (from user in context.Users
+                              where user.SessionKey == sessionKey
+                              select user.Id).FirstOrDefault()
+                };
+
+                //Add request receiver as friend in request sender's list
+                Friend dbFriendReceiver = new Friend()
+                {
+                    Username = (from user in context.Users
+                                where user.SessionKey == sessionKey
+                                select user.Username).FirstOrDefault(),
+                    Avatar = (from user in context.Users
+                                where user.SessionKey == sessionKey
+                                select user.Avatar).FirstOrDefault(),
+                    UserId = (from request in context.Requests
+                              where request.SenderId == senderId
+                              select request.Sender.Id).FirstOrDefault()
+                };
+                context.Friends.Add(dbFriendSender);
+                context.Friends.Add(dbFriendReceiver);
+                context.SaveChanges();
+            }
+        }
+        
     }
 }

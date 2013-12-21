@@ -174,9 +174,11 @@
     <Compile Include="Models\ErrorResposeException.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\PostModel.cs" />
+    <Compile Include="Models\RequestModel.cs" />
     <Compile Include="Models\ServerErrorException.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Persisters\BaseDataPersister.cs" />
+    <Compile Include="Persisters\RequestDataPersister.cs" />
     <Compile Include="Persisters\UserDataPersister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
