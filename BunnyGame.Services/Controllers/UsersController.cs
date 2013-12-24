@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace BunnyGame.Services.Controllers
 {
@@ -34,7 +35,7 @@ namespace BunnyGame.Services.Controllers
             });
             return responseMsg;
         }
-
+        [EnableCors("*", "*", "*")]
         [HttpPost]
         [ActionName("login")]
         public HttpResponseMessage LoginUser(UserLoginModel user)

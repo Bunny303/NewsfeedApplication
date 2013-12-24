@@ -207,11 +207,11 @@ namespace BunnyGame.Services.Persisters
                                 where post.UserId == u.Id
                                 select new PostModel()
                                 {
-                                Title = post.Title,
-                                Content = post.Content,
-                                PublicDate = post.PublicDate,
-                                Author = post.User.Username,
-                                Avatar = post.User.Avatar
+                                    Title = post.Title,
+                                    Content = post.Content,
+                                    PublicDate = post.PublicDate,
+                                    Author = post.User.Username,
+                                    Avatar = post.User.Avatar
                                 }).ToList(),
                         ReceiveRequests = (from request in context.Requests
                                             where request.RecipientId == u.Id
@@ -229,7 +229,18 @@ namespace BunnyGame.Services.Persisters
                                    select new UserFriendModel()
                                    {
                                        Username = friend.Username,
-                                       Avatar = friend.Avatar
+                                       Avatar = friend.Avatar,
+                                       Wall = (from post in context.Posts
+                                               //Filter post friend with username - username it's unique
+                                               where post.User.Username==friend.Username 
+                                               select new PostModel()
+                                               {
+                                                   Title = post.Title,
+                                                   Content = post.Content,
+                                                   PublicDate = post.PublicDate,
+                                                   Author = post.User.Username,
+                                                   Avatar = post.User.Avatar
+                                               }).ToList()
                                    }).ToList()
                     });
                 return user.FirstOrDefault();
