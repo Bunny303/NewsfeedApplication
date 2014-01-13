@@ -1,0 +1,61 @@
+﻿<div id="posts-container">
+    <div id="left-column">
+        <div class="small-window" id="logged-user">
+            <img class="small-images" ng-src="{{loggedUser.avatar}}"/>
+            <div><strong>{{loggedUser.username}}</strong></div>
+            <button class="button-small" ng-click="logout()">Logout</button>
+        </div>
+        <div id="friends">
+            <ul class="small-window" ng-model="loggedUser.friends" ng-show="friendsShow">
+                <li ng-repeat="friend in loggedUser.friends">
+                    <img class="small-images" ng-src="{{friend.avatar}}" />
+                    <div>{{friend.username}}</div>
+                </li>
+            </ul>
+        </div>
+        <div class="small-window" id="search">
+            <input id="search-username" ng-model="searchedUser.username" placeholder="Search for friends..."/>
+            <button class="button-small" ng-click="searchUser()">Search</button>
+            
+            <div id="result-search">
+                <ul class="small-window" ng-model="resultUsers" ng-show="resultSearchShow">
+                    <li ng-repeat="user in resultUsers">
+                        <img class="small-images" ng-src="{{user.avatar}}" />
+                        <div>{{user.username}}</div>
+                        <button class="button-small" id="request-frienship" ng-click="makeRequest($index)">Request friendship</button>
+                    </li>
+                </ul>
+                <p class="error-msg" ng-show="errorSearchShow">{{errorMessage}}</p>
+            </div>
+        </div>
+        <div id="requests" >
+            <ul class="small-window" ng-model="loggedUser.receiveRequests" ng-show="requestShow">
+                <li ng-repeat="request in loggedUser.receiveRequests">
+                    <img class="small-images" ng-src="{{request.senderAvatar}}" />
+                    <div>
+                        {{request.title}} from <strong>{{request.senderName}}</strong>
+                        <button class="button-small" ng-click="addFriend(request.senderId, request.id)">Accept</button>
+                        <button class="button-small" ng-click="deleteRequest(request.id)">Decline</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="riht-column">
+        <div class="input">
+            <input id="title-post" type="text" placeholder="Title" ng-model="post.title"/>
+            <input id="content-post" type="text" placeholder="Type your text here..." ng-model="post.content"/>
+            <button class="button" ng-click="addPost()">Publish</button>
+        </div>
+        <div>
+            <ul class="input" ng-model="loggedUser.wall" ng-show="wallShow">
+                <li ng-repeat="post in loggedUser.wall | orderBy: '-date'" id="post">
+                    <img class="big-images" ng-src="{{post.avatar}}" />
+                    <p><strong>{{post.title}}</strong></p>
+                    <p>{{post.content}}</p>
+                    <p><strong>{{post.author}}</strong> posted on {{post.date | date:'d-MMM-yyyy HH:mm'}}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
