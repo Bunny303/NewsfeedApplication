@@ -6,6 +6,7 @@ Project from course JS Frameworks
 ### Server documentation 
 
 ASP.NET Web API -> RESTful services
+
 SQL Server -> Database
 
 Server part is deploy on cloud platform AppHarbor.
