@@ -1,4 +1,5 @@
 ﻿body {
+    height:100%;
     margin: 0;
     padding: 0;
     background: #4E535B;
@@ -85,13 +86,14 @@ input:focus{
 }
 
 #posts-container{
-  margin: 0 auto;
-  width: 860px;
-  background: #F1F2F4;
-  text-align: left;
-  color: #36383C;
-  text-shadow: 0 1px 0 #FFF;
-  padding: 20px 40px 20px 40px;
+    height:100%;
+    margin: 0 auto;
+    width: 860px;
+    background: #F1F2F4;
+    text-align: left;
+    color: #36383C;
+    text-shadow: 0 1px 0 #FFF;
+    padding: 20px 40px 20px 40px;
 }
 
     #posts-container>div>input{
@@ -105,10 +107,14 @@ input:focus{
 }
 
 #left-column{
+    height: 100%;
     float:left;
     width: 300px;
     margin: 0 15px 0 0;
     padding: 0;
+}
+#right-column{
+   margin-left: 315px; 
 }
 
 .small-window{

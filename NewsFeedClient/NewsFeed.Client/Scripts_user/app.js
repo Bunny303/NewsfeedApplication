@@ -26,5 +26,6 @@ newsFeedModule.config(["$routeProvider", function ($routeProvider) {
             $location.path("/menu");
         }
     });
+    $rootScope.baseUrl = 'http://newsfeed.apphb.com/api/';
 });
 

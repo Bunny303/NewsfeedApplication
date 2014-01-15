@@ -4,11 +4,11 @@
 
 var newsFeedControllers = angular.module('newsFeedControllers', []);
 
-newsFeedControllers.controller('LoginController', ['$scope', '$http', '$location',
-    function ($scope, $http, $location) {
+newsFeedControllers.controller('LoginController', ['$scope', '$http', '$location', '$rootScope',
+    function ($scope, $http, $location, $rootScope) {
         $scope.loginUser = function () {
             var hash = CryptoJS.SHA1($scope.user.password).toString();
-            $http.post('http://newsfeed.apphb.com/api/Users/login', { username: $scope.user.username, authCode: hash })
+            $http.post($rootScope.baseUrl + 'Users/login', { username: $scope.user.username, authCode: hash })
                 .success(function (data) {
                     localStorage.setItem("sessionKey", data.sessionKey);
                     $location.url('/menu');
@@ -40,9 +40,8 @@ newsFeedControllers.controller('RegisterController', ['$scope', '$http', '$locat
 
         $scope.registerUser = function () {
             var hash = CryptoJS.SHA1($scope.user.password).toString();
-            $http.post('http://newsfeed.apphb.com/api/Users/register', { username: $scope.user.username, authCode: hash, avatar: $scope.userAvatar })
+            $http.post($rootScope.baseUrl + 'Users/register', { username: $scope.user.username, authCode: hash, avatar: $scope.userAvatar })
                 .success(function (data) {
-                    //$rootScope.sessionKey = data.sessionKey;
                     localStorage.setItem("sessionKey", data.sessionKey);
                     $location.url('/menu');
                 })
@@ -62,7 +61,6 @@ newsFeedControllers.controller('MenuController', ['$scope', '$http', '$location'
             friends: [],
             receiveRequests: []
         };
-        //var sessionKey = $rootScope.sessionKey;
         var sessionKey = localStorage.getItem("sessionKey");
         $scope.resultSearchShow = false;
         $scope.errorSearchShow = false;
@@ -70,7 +68,7 @@ newsFeedControllers.controller('MenuController', ['$scope', '$http', '$location'
         $scope.friendsShow = false;
         $scope.wallShow = false;
                 
-        $http.get('http://newsfeed.apphb.com/api/Users/getUserBySessionKey/' + sessionKey)
+        $http.get($rootScope.baseUrl + 'Users/getUserBySessionKey/' + sessionKey)
             .success(function (user) {
                 var currUser = {
                     username: user.username,
@@ -93,79 +91,78 @@ newsFeedControllers.controller('MenuController', ['$scope', '$http', '$location'
             })
             .error(function (er) {
                 console.log(JSON.stringify(er));
-            }).then(function () {
-                $http.get('http://newsfeed.apphb.com/api/Users/getUserRequestsBySessionKey/' + sessionKey)
-                   .success(function (requests) {
-                       _.each(requests, function (request) {
-                           $scope.loggedUser.receiveRequests.push({
-                               id: request.Id,
-                               title: request.Title,
-                               senderId: request.SenderId,
-                               senderName: request.SenderName,
-                               senderAvatar: request.SenderAvatar,
-                               answer: request.Answer
-                           });
-                       });
-                                              
-                       if ($scope.loggedUser.receiveRequests.length != 0) {
-                           $scope.requestShow = true;
-                       }
-                   })
-                   .error(function (er) {
-                       console.log(JSON.stringify(er));
-                   });
+            });
 
-                $http.get('http://newsfeed.apphb.com/api/Users/getUserFriendsBySessionKey/' + sessionKey)
-                    .success(function (friends) {
-                        _.each(friends, function (friend) {
-                            $scope.loggedUser.friends.push({
-                                username: friend.username,
-                                avatar: friend.avatar
-                            });
-                            _.each(friend.wall, function (post) {
-                                $scope.loggedUser.wall.push({
-                                    title: post.Title,
-                                    content: post.Content,
-                                    date: post.PublicDate,
-                                    author: post.Author,
-                                    avatar: post.Avatar
-                                });
+            $http.get($rootScope.baseUrl + 'Users/getUserRequestsBySessionKey/' + sessionKey)
+                .success(function (requests) {
+                    _.each(requests, function (request) {
+                        $scope.loggedUser.receiveRequests.push({
+                            id: request.Id,
+                            title: request.Title,
+                            senderId: request.SenderId,
+                            senderName: request.SenderName,
+                            senderAvatar: request.SenderAvatar,
+                            answer: request.Answer
+                        });
+                    });
+                                              
+                    if ($scope.loggedUser.receiveRequests.length != 0) {
+                        $scope.requestShow = true;
+                    }
+                })
+                .error(function (er) {
+                    console.log(JSON.stringify(er));
+                });
+
+            $http.get($rootScope.baseUrl + 'Users/getUserFriendsBySessionKey/' + sessionKey)
+                .success(function (friends) {
+                    _.each(friends, function (friend) {
+                        $scope.loggedUser.friends.push({
+                            username: friend.username,
+                            avatar: friend.avatar
+                        });
+                        _.each(friend.wall, function (post) {
+                            $scope.loggedUser.wall.push({
+                                title: post.Title,
+                                content: post.Content,
+                                date: post.PublicDate,
+                                author: post.Author,
+                                avatar: post.Avatar
                             });
                         });
-                                              
-                        if ($scope.loggedUser.friends.length != 0) {
-                            $scope.friendsShow = true;
-                        }
-                    })
-                    .error(function (er) {
-                        console.log(JSON.stringify(er));
                     });
+                                              
+                    if ($scope.loggedUser.friends.length != 0) {
+                        $scope.friendsShow = true;
+                    }
+                })
+                .error(function (er) {
+                    console.log(JSON.stringify(er));
+                });
 
-                $http.get('http://newsfeed.apphb.com/api/Users/getUserWallBySessionKey/' + sessionKey)
-                   .success(function (wall) {
-                       _.each(wall, function (post) {
-                           $scope.loggedUser.wall.push({
-                               title: post.Title,
-                               content: post.Content,
-                               date: post.PublicDate,
-                               author: post.Author,
-                               avatar: post.Avatar
-                           });
-                       });
+            $http.get($rootScope.baseUrl + 'Users/getUserWallBySessionKey/' + sessionKey)
+                .success(function (wall) {
+                    _.each(wall, function (post) {
+                        $scope.loggedUser.wall.push({
+                            title: post.Title,
+                            content: post.Content,
+                            date: post.PublicDate,
+                            author: post.Author,
+                            avatar: post.Avatar
+                        });
+                    });
                        
-                       if ($scope.loggedUser.wall.length != 0) {
-                           $scope.wallShow = true;
-                       }
-                   })
-                   .error(function (er) {
-                       console.log(JSON.stringify(er));
-                   });
-                }
-            );
-
+                    if ($scope.loggedUser.wall.length != 0) {
+                        $scope.wallShow = true;
+                    }
+                })
+                .error(function (er) {
+                    console.log(JSON.stringify(er));
+                });
+        
         //Add single post
         $scope.addPost = function () {
-            var url = 'http://newsfeed.apphb.com/api/Posts/addPost/' + sessionKey + '?title=' + $scope.post.title + '&content=' + $scope.post.content;
+            var url = $rootScope.baseUrl + 'Posts/addPost/' + sessionKey + '?title=' + $scope.post.title + '&content=' + $scope.post.content;
             $http.post(url)
                 .success(function (data) {
                     $route.reload();
@@ -179,7 +176,7 @@ newsFeedControllers.controller('MenuController', ['$scope', '$http', '$location'
         //Search user
         $scope.searchUser = function () {
             if ($scope.searchedUser) {
-                $http.get('http://newsfeed.apphb.com/api/Users/getUser', { params: { username: $scope.searchedUser.username } })
+                $http.get($rootScope.baseUrl + 'Users/getUser', { params: { username: $scope.searchedUser.username } })
                 .success(function (data) {
                     if (data.length != 0) {
                         var users = [];
@@ -215,7 +212,7 @@ newsFeedControllers.controller('MenuController', ['$scope', '$http', '$location'
         };
 
         $scope.makeRequest = function (index) {
-            $http.post('http://newsfeed.apphb.com/api/Users/sendrequest/' + sessionKey, { username: $scope.resultUsers[index].username, avatar: $scope.resultUsers[index].avatar })
+            $http.post($rootScope.baseUrl +  'Users/sendrequest/' + sessionKey, { username: $scope.resultUsers[index].username, avatar: $scope.resultUsers[index].avatar })
                 .success(function (data) {
                     $scope.resultUsers.splice(index, 1);
                     if ($scope.resultUsers.length == 0) {
@@ -228,7 +225,7 @@ newsFeedControllers.controller('MenuController', ['$scope', '$http', '$location'
         };
 
         $scope.addFriend = function (senderId, id) {
-            $http.post('http://newsfeed.apphb.com/api/Users/addFriend/' + sessionKey + '?senderId=' + senderId)
+            $http.post($rootScope.baseUrl +  'Users/addFriend/' + sessionKey + '?senderId=' + senderId)
                 .success(function (data) {
                     $scope.deleteRequest(id);
                     $route.reload();
@@ -240,7 +237,7 @@ newsFeedControllers.controller('MenuController', ['$scope', '$http', '$location'
         };
 
         $scope.deleteRequest = function (id) {
-            $http({ method: 'DELETE', url: 'http://newsfeed.apphb.com/api/Users/deleteRequest?id=' + id })
+            $http({ method: 'DELETE', url: $rootScope.baseUrl + 'Users/deleteRequest?id=' + id })
                 .success(function (data) {
                     $route.reload();
                     console.log(JSON.stringify(data));
