@@ -20,3 +20,5 @@ Used libraries:
 * Sha1
 
 For testing you can use already register username: testuser and password: testpass or just register new user.
+
+First loggin can be very slow sometimes :( Will be repair soon...
